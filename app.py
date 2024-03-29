@@ -8,6 +8,7 @@ from torch.nn.functional import softmax
 from transformers import ViTImageProcessor, ViTForImageClassification
 from transformers_interpret import ImageClassificationExplainer
 
+## loads class labels for the ImageNet dataset from a URL and returns them as a list.
 
 def load_label_data():
     file_url = "https://gist.githubusercontent.com/yrevar/942d3a0ac09ec9e5eb3a/raw/238f720ff059c1f82f368259d1ca4ffa5dd8f9f5/imagenet1000_clsidx_to_labels.txt"
@@ -22,7 +23,8 @@ def load_label_data():
             pass
     return labels
 
-
+## This class manages the UI and model inference logic.
+## It initializes the ViT model and processor, loads label data, and defines methods for running the model, classifying images, and explaining predictions.
 class WebUI:
     def __init__(self):
         super().__init__()
@@ -30,6 +32,8 @@ class WebUI:
         self.processor = ViTImageProcessor.from_pretrained('google/vit-base-patch16-224')
         self.model = ViTForImageClassification.from_pretrained('google/vit-base-patch16-224')
         self.labels = load_label_data()
+
+## run_model() method runs the ViT model on an input image and returns the top k predictions.
     
     def run_model(self, image):
         inputs = self.processor(images=image, return_tensors="pt")
@@ -37,10 +41,14 @@ class WebUI:
         outputs = softmax(outputs.logits, dim=1)
         outputs = topk(outputs, k=self.nb_classes)
         return outputs
-
+    
+## classify_image() method classifies an image and returns the top k predicted classes along with their probabilities.
+    
     def classify_image(self, image):
         top10 = self.run_model(image)
         return {self.labels[top10[1][0][i]]: float(top10[0][0][i]) for i in range(self.nb_classes)}
+    
+## explain_pred() method generates saliency maps to explain model predictions.
 
     def explain_pred(self, image):
         image_classification_explainer = ImageClassificationExplainer(model=self.model, feature_extractor=self.processor)
@@ -51,19 +59,22 @@ class WebUI:
         saliency /= np.amax(np.abs(saliency))
         return saliency
     
+## run() method sets up the UI elements using Gradio and launches the UI.
+
     def run(self):
         examples=[
-            ['https://github.com/andreped/INF1600-ai-workshop/releases/download/Examples/cat.jpg'],
-            ['https://github.com/andreped/INF1600-ai-workshop/releases/download/Examples/dog.jpeg'],
+            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/example-img/car.jpg'],
+            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/example-img/hare.jpg'],
+            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/example-img/horse.jpg'],
         ]
         with gr.Blocks() as demo:
             with gr.Row():
                 image = gr.Image(height=512)
                 label = gr.Label(num_top_classes=self.nb_classes)
-                saliency = gr.Image(height=512, label="saliency map", show_label=True)
+                saliency = gr.Image(height=512, label="attention (saliency) map", show_label=True)
 
                 with gr.Column(scale=0.2, min_width=150):
-                    run_btn = gr.Button("Run analysis", variant="primary", elem_id="run-button")
+                    run_btn = gr.Button("Analysis", variant="primary", elem_id="run-button")
 
                     run_btn.click(
                         fn=lambda x: self.explain_pred(x),
@@ -79,17 +90,19 @@ class WebUI:
 
                     gr.Examples(
                         examples=[
-                            ['https://github.com/andreped/INF1600-ai-workshop/releases/download/Examples/cat.jpg'],
-                            ['https://github.com/andreped/INF1600-ai-workshop/releases/download/Examples/dog.jpeg'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/example-img/car.jpg'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/example-img/hare.jpg'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/example-img/horse.jpg'],
                         ],
                         inputs=image,
                         outputs=image,
                         fn=lambda x: x,
-                        cache_examples=True,
+                        cache_examples=False,
                     )
         
         demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=False)
 
+## creates an instance of the WebUI class and runs the UI.
 
 def main():
     ui = WebUI()
