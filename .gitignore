@@ -1,5 +1,4 @@
 venv/
-*.jpg
 *.jpeg
 *.png
 flagged/
@@ -8,3 +7,6 @@ flagged/
 *.vs/
 *.idea/
 gradio_cached_examples/
+env/
+*.jpeg
+*.png

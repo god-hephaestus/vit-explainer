@@ -2,3 +2,5 @@ gradio
 torch
 transformers
 transformers-interpret
+requests
+numpy

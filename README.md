@@ -1,5 +1,5 @@
 ---
-title: 'vit-explainer'
+title: "vit-explainer"
 colorFrom: indigo
 colorTo: indigo
 sdk: gradio
@@ -10,19 +10,26 @@ license: mit
 app_file: app.py
 ---
 
+# venv
+
+open cmd
+cd C:\Users\batuh\OneDrive\Belgeler\GitHub\vit-explainer
+(or whatever your path is)
+pip install virtualenv
+virtualenv -ppython3 venv --clear
+.\env\Scripts\activate
+pip install -r requirements.txt
+python app.py
+
 # vit-explainer
 
 [![license](https://img.shields.io/github/license/DAVFoundation/captain-n3m0.svg?style=flat-square)](https://github.com/raidionics/AeroPath/blob/main/LICENSE.md)
 [![CI/CD](https://github.com/andreped/vit-explainer/actions/workflows/deploy.yml/badge.svg)](https://github.com/andreped/vit-explainer/actions/workflows/deploy.yml)
 <a target="_blank" href="https://huggingface.co/spaces/andreped/vit-explainer"><img src="https://img.shields.io/badge/🤗%20Hugging%20Face-Spaces-yellow.svg"></a>
 
-This web app was developed to test and demonstrate an explainable AI (XAI)-based technique with a pretrained vision transformer (ViT). 
+This web app was developed to test and demonstrate an explainable AI (XAI)-based technique with a pretrained vision transformer (ViT).
 
 The app is deployed on Hugging Face and can be access by clicking the 🤗 badge above.
-
-## Demo
-
-<img width="1283" alt="Screenshot 2023-11-12 at 23 48 54" src="https://github.com/andreped/vit-explainer/assets/29090665/1fe47bb5-625d-4717-9348-53930d5129dc">
 
 ## Development
 
