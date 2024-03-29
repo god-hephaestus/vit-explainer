@@ -10,7 +10,7 @@ license: mit
 app_file: app.py
 ---
 
-# venv
+# virtual env for windows
 
 open cmd
 cd C:\Users\batuh\OneDrive\Belgeler\GitHub\vit-explainer

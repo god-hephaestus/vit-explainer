@@ -11,7 +11,7 @@ from transformers_interpret import ImageClassificationExplainer
 ## loads class labels for the ImageNet dataset from a URL and returns them as a list.
 
 def load_label_data():
-    file_url = "https://gist.githubusercontent.com/yrevar/942d3a0ac09ec9e5eb3a/raw/238f720ff059c1f82f368259d1ca4ffa5dd8f9f5/imagenet1000_clsidx_to_labels.txt"
+    file_url = "https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/ImageNet_1k.txt"
     response = requests.get(file_url)
     labels = []
     pattern = '["\'](.*?)["\']'
@@ -63,9 +63,9 @@ class WebUI:
 
     def run(self):
         examples=[
-            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/example-img/car.jpg'],
-            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/example-img/hare.jpg'],
-            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/example-img/horse.jpg'],
+            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/car.jpg'],
+            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/hare.jpg'],
+            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/horse.jpg'],
         ]
         with gr.Blocks() as demo:
             with gr.Row():
@@ -90,9 +90,9 @@ class WebUI:
 
                     gr.Examples(
                         examples=[
-                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/example-img/car.jpg'],
-                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/example-img/hare.jpg'],
-                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/example-img/horse.jpg'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/car.jpg'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/hare.jpg'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/horse.jpg'],
                         ],
                         inputs=image,
                         outputs=image,
