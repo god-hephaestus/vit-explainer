@@ -3,16 +3,16 @@ import re
 
 import gradio as gr
 import numpy as np
+import pandas as pd
 from torch import topk
 from torch.nn.functional import softmax
 from transformers import ViTImageProcessor, ViTForImageClassification
 from transformers_interpret import ImageClassificationExplainer
 
 ## loads class labels for the ImageNet dataset from a URL and returns them as a list.
-
 def load_label_data():
-    file_url = "https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/ImageNet_1k.txt"
-    response = requests.get(file_url)
+    dosya_url = "https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/ImageNet_1k.txt"
+    response = requests.get(dosya_url)
     labels = []
     pattern = '["\'](.*?)["\']'
     for line in response.text.split('\n'):
@@ -62,13 +62,13 @@ class WebUI:
 ## run() method sets up the UI elements using Gradio and launches the UI.
 
     def run(self):
-        examples=[
-            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/car.jpg'],
-            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/hare.jpg'],
-            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/horse.jpg'],
-        ]
         with gr.Blocks() as demo:
-            with gr.Row():
+            gr.HTML(value="<p style='margin-top: 1rem, margin-bottom: 1rem'>This is html</p>")
+            with gr.Accordion("Detaylar", open=True):
+                gr.Markdown("Böyle Böyle çalışıyor vs vs")
+            gr.Markdown("""# ViT Bitirme Projesi
+                        Görüntü Sınıflandırmaya başlamak için örnek fotoğraf seçin ya da fotoğraf yükleyin""")
+            with gr.Row(elem_classes="customclass",variant="panel",equal_height=True):
                 image = gr.Image(height=512)
                 label = gr.Label(num_top_classes=self.nb_classes)
                 saliency = gr.Image(height=512, label="attention (saliency) map", show_label=True)
@@ -99,9 +99,21 @@ class WebUI:
                         fn=lambda x: x,
                         cache_examples=False,
                     )
-        
+            # simple = pd.DataFrame(
+            #     {
+            #         "classes": self.nb_classes,
+            #         "percentages": [],
+            #     }
+            #     )
+            # gr.BarPlot(
+            #         value=simple,
+            #         x="classes",
+            #         y="percentages",
+            #         title="Class analysis",
+            #         container=False,
+            #     )
+            
         demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=False)
-
 ## creates an instance of the WebUI class and runs the UI.
 
 def main():
