@@ -65,7 +65,7 @@ class WebUI:
             x="Key",
             y="Prediction",
             title="Saliency Bar Report",
-            container=False
+            container=True
         )
 
 
@@ -89,11 +89,14 @@ class WebUI:
                 gr.Markdown("Böyle Böyle çalışıyor vs vs")
             gr.Markdown("""# ViT Bitirme Projesi
                         Görüntü Sınıflandırmaya başlamak için örnek fotoğraf seçin ya da fotoğraf yükleyin""")
+            
             with gr.Row(elem_classes="customclass",variant="panel",equal_height=True):
-                image = gr.Image(height=512)
-                #print(self.result)
-                
-                label = self.redraw_frame(image)
+                image = gr.Image(height=512)                
+                label = gr.BarPlot(value=None,
+            title="Saliency Bar Report",
+            container=True
+        )
+                #self.redraw_frame(image)
                 label2 = gr.Label(num_top_classes=self.nb_classes)
                 saliency = gr.Image(height=512, label="attention (saliency) map", show_label=True)
 
