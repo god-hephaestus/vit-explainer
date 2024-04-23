@@ -32,7 +32,7 @@ class WebUI:
         self.processor = ViTImageProcessor.from_pretrained('google/vit-base-patch16-224')
         self.model = ViTForImageClassification.from_pretrained('google/vit-base-patch16-224')
         self.labels = load_label_data()
-        self.result = {"A":2}
+        self.result = {"Empty":1}
 
 ## run_model() method runs the ViT model on an input image and returns the top k predictions.
     
@@ -44,27 +44,27 @@ class WebUI:
         return outputs
     
 ## classify_image() method classifies an image and returns the top k predicted classes along with their probabilities.
+
     def classify_image(self, image):
         top10 = self.run_model(image)
         self.result = {self.labels[top10[1][0][i]]: float(top10[0][0][i]) for i in range(self.nb_classes)}
-        self.redraw_frame(self)
+        # self.redraw_frame(self) # Gives error since no saliency
         return self.result
     
-    def redraw_frame(self, image):
-        print(self.result)
-        keys = list(self.result.keys())
-        values = list(self.result.values())
+## redraw_frame() method generates saliency mapped bar-cahrts to the label field of the UI.
+
+    def redraw_frame(self, _):
         simple = pd.DataFrame(
         {
-        "item": keys,
-        "inventory": values,
+        "Key": list(self.result.keys()),
+        "Prediction": list(self.result.values()),
         }
         )        
         return gr.BarPlot(
             value=simple,
-            x="item",
-            y="inventory",
-            title="Simple Bar Plot",
+            x="Key",
+            y="Prediction",
+            title="Saliency Bar Report",
             container=False
         )
 
@@ -91,10 +91,10 @@ class WebUI:
                         Görüntü Sınıflandırmaya başlamak için örnek fotoğraf seçin ya da fotoğraf yükleyin""")
             with gr.Row(elem_classes="customclass",variant="panel",equal_height=True):
                 image = gr.Image(height=512)
-                print(self.result)
+                #print(self.result)
                 
                 label = self.redraw_frame(image)
-                # label = gr.Label(num_top_classes=self.nb_classes)
+                label2 = gr.Label(num_top_classes=self.nb_classes)
                 saliency = gr.Image(height=512, label="attention (saliency) map", show_label=True)
 
                 with gr.Column(scale=0.2, min_width=150):
@@ -108,6 +108,14 @@ class WebUI:
 
                     run_btn.click(
                         fn=lambda x: self.classify_image(x),
+                        inputs=image,
+                        outputs=label2,
+                    )
+
+                    dis_btn = gr.Button("Calculate Bars", variant="primary", elem_id="dis-button")
+
+                    dis_btn.click(
+                        fn=lambda x: self.redraw_frame(x),
                         inputs=image,
                         outputs=label,
                     )
