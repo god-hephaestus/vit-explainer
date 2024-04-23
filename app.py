@@ -32,6 +32,7 @@ class WebUI:
         self.processor = ViTImageProcessor.from_pretrained('google/vit-base-patch16-224')
         self.model = ViTForImageClassification.from_pretrained('google/vit-base-patch16-224')
         self.labels = load_label_data()
+        self.result = {"A":2}
 
 ## run_model() method runs the ViT model on an input image and returns the top k predictions.
     
@@ -43,11 +44,31 @@ class WebUI:
         return outputs
     
 ## classify_image() method classifies an image and returns the top k predicted classes along with their probabilities.
-    
     def classify_image(self, image):
         top10 = self.run_model(image)
-        return {self.labels[top10[1][0][i]]: float(top10[0][0][i]) for i in range(self.nb_classes)}
+        self.result = {self.labels[top10[1][0][i]]: float(top10[0][0][i]) for i in range(self.nb_classes)}
+        self.redraw_frame(self)
+        return self.result
     
+    def redraw_frame(self, image):
+        print(self.result)
+        keys = list(self.result.keys())
+        values = list(self.result.values())
+        simple = pd.DataFrame(
+        {
+        "item": keys,
+        "inventory": values,
+        }
+        )        
+        return gr.BarPlot(
+            value=simple,
+            x="item",
+            y="inventory",
+            title="Simple Bar Plot",
+            container=False
+        )
+
+
 ## explain_pred() method generates saliency maps to explain model predictions.
 
     def explain_pred(self, image):
@@ -70,7 +91,10 @@ class WebUI:
                         Görüntü Sınıflandırmaya başlamak için örnek fotoğraf seçin ya da fotoğraf yükleyin""")
             with gr.Row(elem_classes="customclass",variant="panel",equal_height=True):
                 image = gr.Image(height=512)
-                label = gr.Label(num_top_classes=self.nb_classes)
+                print(self.result)
+                
+                label = self.redraw_frame(image)
+                # label = gr.Label(num_top_classes=self.nb_classes)
                 saliency = gr.Image(height=512, label="attention (saliency) map", show_label=True)
 
                 with gr.Column(scale=0.2, min_width=150):
@@ -99,19 +123,6 @@ class WebUI:
                         fn=lambda x: x,
                         cache_examples=False,
                     )
-            # simple = pd.DataFrame(
-            #     {
-            #         "classes": self.nb_classes,
-            #         "percentages": [],
-            #     }
-            #     )
-            # gr.BarPlot(
-            #         value=simple,
-            #         x="classes",
-            #         y="percentages",
-            #         title="Class analysis",
-            #         container=False,
-            #     )
             
         demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=False)
 ## creates an instance of the WebUI class and runs the UI.

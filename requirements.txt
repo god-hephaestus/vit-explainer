@@ -4,3 +4,4 @@ transformers
 transformers-interpret
 requests
 numpy
+pandas
