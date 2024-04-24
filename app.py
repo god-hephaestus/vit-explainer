@@ -127,7 +127,11 @@ class WebUI:
                         examples=[
                             ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/car.jpg'],
                             ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/hare.jpg'],
-                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/horse.jpg'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/frog.jpg'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/dog.jpg'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/hammershark.jpg'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/snake.jpg'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/cat.jpg'],
                         ],
                         inputs=image,
                         outputs=image,
