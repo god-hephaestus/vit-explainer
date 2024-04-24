@@ -84,21 +84,20 @@ class WebUI:
 
     def run(self):
         with gr.Blocks() as demo:
-            gr.HTML(value="<p style='margin-top: 1rem, margin-bottom: 1rem'>This is html</p>")
             with gr.Accordion("Detaylar", open=True):
                 gr.Markdown("Böyle Böyle çalışıyor vs vs")
             gr.Markdown("""# ViT Bitirme Projesi
                         Görüntü Sınıflandırmaya başlamak için örnek fotoğraf seçin ya da fotoğraf yükleyin""")
             
-            with gr.Row(elem_classes="customclass",variant="panel",equal_height=True):
+            with gr.Row(variant="panel",equal_height=True):
                 image = gr.Image(height=512)                
                 label = gr.BarPlot(value=None,
-            title="Saliency Bar Report",
+            title="Saliency Raporu",
             container=True
         )
                 #self.redraw_frame(image)
                 label2 = gr.Label(num_top_classes=self.nb_classes)
-                saliency = gr.Image(height=512, label="attention (saliency) map", show_label=True)
+                saliency = gr.Image(height=512, label="dikkat (saliency) haritası", show_label=True)
 
                 with gr.Column(scale=0.2, min_width=150):
                     run_btn = gr.Button("Analysis", variant="primary", elem_id="run-button")
@@ -115,7 +114,7 @@ class WebUI:
                         outputs=label2,
                     )
 
-                    dis_btn = gr.Button("Calculate Bars", variant="primary", elem_id="dis-button")
+                    dis_btn = gr.Button("Chart", variant="primary", elem_id="dis-button")
 
                     dis_btn.click(
                         fn=lambda x: self.redraw_frame(x),
@@ -124,20 +123,20 @@ class WebUI:
                     )
 
                     gr.Examples(
-                        examples=[
-                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/car.jpg'],
-                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/hare.jpg'],
-                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/frog.jpg'],
-                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/dog.jpg'],
-                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/hammershark.jpg'],
-                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/snake.jpg'],
-                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/cat.jpg'],
+                    examples=[
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/car.png'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/hare.png'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/frog.png'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/dog.png'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/hammershark.png'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/snake.png'],
                         ],
                         inputs=image,
                         outputs=image,
                         fn=lambda x: x,
-                        cache_examples=False,
-                    )
+                        cache_examples=False
+                    )   
+
             
         demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=False)
 ## creates an instance of the WebUI class and runs the UI.

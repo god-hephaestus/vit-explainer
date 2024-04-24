@@ -1,6 +1,5 @@
 venv/
 *.jpeg
-*.png
 flagged/
 *.DS_Store
 *__pycache__/
@@ -9,4 +8,3 @@ flagged/
 gradio_cached_examples/
 env/
 *.jpeg
-*.png
