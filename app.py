@@ -48,10 +48,9 @@ class WebUI:
     def classify_image(self, image):
         top10 = self.run_model(image)
         self.result = {self.labels[top10[1][0][i]]: float(top10[0][0][i]) for i in range(self.nb_classes)}
-        # self.redraw_frame(self) # Gives error since no saliency
         return self.result
     
-## redraw_frame() method generates saliency mapped bar-cahrts to the label field of the UI.
+## redraw_frame() method generates saliency mapped bar-charts to the label field of the UI.
 
     def redraw_frame(self, _):
         simple = pd.DataFrame(
