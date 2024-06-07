@@ -124,12 +124,12 @@ class WebUI:
 
                     gr.Examples(
                     examples=[
-                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/car.png'],
-                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/hare.png'],
-                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/frog.png'],
-                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/dog.png'],
-                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/hammershark.png'],
-                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/snake.png'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/car.jpg'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/hare.jpg'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/frog.jpg'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/dog.jpg'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/hammershark.jpg'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/snake.jpg'],
                         ],
                         inputs=image,
                         outputs=image,
