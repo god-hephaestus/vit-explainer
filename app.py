@@ -64,7 +64,7 @@ class WebUI:
             value=simple,
             x="Key",
             y="Prediction",
-            title="Saliency Bar Report",
+            title="Sınıf Raporu",
             container=True
         )
 
@@ -84,23 +84,24 @@ class WebUI:
 
     def run(self):
         with gr.Blocks() as demo:
-            with gr.Accordion("Detaylar", open=True):
-                gr.Markdown("Böyle Böyle çalışıyor vs vs")
+            with gr.Accordion("Veri Seti ve Vit modeli", open=True):
+                gr.Markdown("ImageNet veri seti 1000 farklı sınıfta toplamda 1.281.167  eğitim görüntüsü, 50.000 doğrulama görüntüsü ve 100.000 test görüntüsü içermektedir. Bu görüntüler, belirli nesne veya konseptleri temsil eder. Eğitim setinde her sınıftan ortalama 1300 görüntü bulunurken, doğrulama setinde her sınıftan 50 ve test setinde her sınıftan 100 görüntü yer almaktadır.")
+                gr.Markdown("ViT modeli olarak ImageNet21K üzerinde eğitilmiş olan ViT-b-16 modeli kullanılmıştır.")
             gr.Markdown("""# ViT Bitirme Projesi
-                        Görüntü Sınıflandırmaya başlamak için örnek fotoğraf seçin ya da fotoğraf yükleyin""")
+                        Görüntü Sınıflandırmaya başlamak için örnek fotoğraf seçin ya da fotoğraf yükleyin ve Analiz tuşuna basın. Sınıflandırma raporunu matplotlib barları halinde görmek için Matplotlib tuşuna basın.""")
             
             with gr.Row(variant="panel",equal_height=True):
                 image = gr.Image(height=512)                
                 label = gr.BarPlot(value=None,
-            title="Saliency Raporu",
+            title="Dikkat Haritası",
             container=True
         )
                 #self.redraw_frame(image)
                 label2 = gr.Label(num_top_classes=self.nb_classes)
-                saliency = gr.Image(height=512, label="dikkat (saliency) haritası", show_label=True)
+                saliency = gr.Image(height=512, label="Dikkat Haritası", show_label=True)
 
                 with gr.Column(scale=0.2, min_width=150):
-                    run_btn = gr.Button("Analysis", variant="primary", elem_id="run-button")
+                    run_btn = gr.Button("Analiz", variant="primary", elem_id="run-button")
 
                     run_btn.click(
                         fn=lambda x: self.explain_pred(x),
@@ -114,7 +115,7 @@ class WebUI:
                         outputs=label2,
                     )
 
-                    dis_btn = gr.Button("Chart", variant="primary", elem_id="dis-button")
+                    dis_btn = gr.Button("Matplotlib", variant="primary", elem_id="dis-button")
 
                     dis_btn.click(
                         fn=lambda x: self.redraw_frame(x),
@@ -124,12 +125,11 @@ class WebUI:
 
                     gr.Examples(
                     examples=[
-                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/car.jpg'],
-                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/hare.jpg'],
-                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/frog.jpg'],
                             ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/dog.jpg'],
                             ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/hammershark.jpg'],
-                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/snake.jpg'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/frog.jpg'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/hare.jpg'],
+                            ['https://raw.githubusercontent.com/god-hephaestus/vit-explainer/main/vit-files/car.jpg'],
                         ],
                         inputs=image,
                         outputs=image,
@@ -138,7 +138,7 @@ class WebUI:
                     )   
 
             
-        demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=False)
+        demo.queue().launch(server_name="localhost", server_port=7860, share=False)
 ## creates an instance of the WebUI class and runs the UI.
 
 def main():
